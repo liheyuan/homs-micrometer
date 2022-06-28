@@ -2,6 +2,7 @@ package com.coder4.homs.micrometer.web;
 
 
 import com.coder4.homs.micrometer.web.data.UserVO;
+import com.coder4.homs.micrometer.web.exception.HttpBadRequestExcepiton;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,15 @@ public class UserController {
 
     @GetMapping(path = "/users/{id}")
     public UserVO getUser(@PathVariable int id) {
+
+        if (id == -10) {
+            throw new RuntimeException();
+        }
+
+        if (id <= 0) {
+            throw new HttpBadRequestExcepiton();
+        }
+
         UserVO user = new UserVO();
         user.setId(id);
         user.setName(String.format("user_%d", id));
