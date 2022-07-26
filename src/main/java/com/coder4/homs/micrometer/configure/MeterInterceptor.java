@@ -32,7 +32,7 @@ public class MeterInterceptor implements HandlerInterceptor {
         Optional<String> methodOp = getMethod(request, handler);
         if (methodOp.isPresent()) {
             DistributionSummary.builder("app_requests_time_ms")
-                    .tag("method", methodOp.get())
+                    .tag("http_method", methodOp.get())
                     .publishPercentiles(0.5, 0.95)
                     .publishPercentileHistogram()
                     .register(meterRegistry)
@@ -43,7 +43,7 @@ public class MeterInterceptor implements HandlerInterceptor {
     public Optional<Counter> getCounterOfTotalCounts(HttpServletRequest request, Object handler) {
         Optional<String> methodOp = getMethod(request, handler);
         if (methodOp.isPresent()) {
-            return Optional.of(meterRegistry.counter("app_requests_total_counts", "method",
+            return Optional.of(meterRegistry.counter("app_requests_total_counts", "http_method",
                     methodOp.get()));
         } else {
             return Optional.empty();
@@ -53,7 +53,7 @@ public class MeterInterceptor implements HandlerInterceptor {
     public Optional<Counter> getCounterOfExceptionCounts(HttpServletRequest request, Object handler) {
         Optional<String> methodOp = getMethod(request, handler);
         if (methodOp.isPresent()) {
-            return Optional.of(meterRegistry.counter("app_requests_exption_counts", "method",
+            return Optional.of(meterRegistry.counter("app_requests_exception_counts", "http_method",
                     methodOp.get()));
         } else {
             return Optional.empty();
@@ -64,8 +64,8 @@ public class MeterInterceptor implements HandlerInterceptor {
                                                         Object handler) {
         Optional<String> methodOp = getMethod(request, handler);
         if (methodOp.isPresent()) {
-            return Optional.of(meterRegistry.counter(String.format("app_requests_resp%d_counts", response.getStatus()),
-                    "method", methodOp.get()));
+            return Optional.of(meterRegistry.counter("app_requests_status_counts",
+                    "http_method", methodOp.get(), "status_code", String.valueOf(response.getStatus())));
         } else {
             return Optional.empty();
         }

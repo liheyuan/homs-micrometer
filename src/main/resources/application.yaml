@@ -1,0 +1,5 @@
+spring.application.name: homs-micrometer
+management:
+  server.port: 9091
+  endpoints.web.exposure.include: "*"
+  metrics.tags.application: ${spring.application.name}

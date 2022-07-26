@@ -34,7 +34,7 @@
 
 		<dependency>
 			<groupId>io.micrometer</groupId>
-			<artifactId>micrometer-registry-jmx</artifactId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
 			<version>1.8.7</version>
 		</dependency>
 
